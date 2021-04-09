@@ -6,10 +6,44 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <script src="https://unpkg.com/vue@next"></script>
+
 </head>
 
 <body>
-  hi~
+  <div id="app"></div>
+  <script type='module'>
+    import RD from './README.md'
+    const { createApp, h } = Vue
+
+    const NotFoundComponent = { template: '<p>Page not found</p>' }
+    const HomeComponent = { template: '<p>Home page</p>' }
+    const AboutComponent = { template: RD }
+
+    const routes = {
+      '/': HomeComponent,
+      '/about': AboutComponent
+    }
+
+    const SimpleRouter = {
+      data: () => ({
+        currentRoute: window.location.pathname
+      }),
+
+      computed: {
+        CurrentComponent() {
+          return routes[this.currentRoute] || AboutComponent
+        }
+      },
+
+      render() {
+        console.log(this.CurrentComponent, window.location.pathname)
+        return h(this.CurrentComponent)
+      }
+    }
+
+    createApp(SimpleRouter).mount('#app')
+  </script>
 </body>
 
 </html>
